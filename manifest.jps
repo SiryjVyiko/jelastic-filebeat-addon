@@ -19,7 +19,7 @@ settings:
       caption: Elasticsearch Host
       placeholder: 0.0.0.0:9200
       required: true
-
+      
     - type: compositefield
       caption: Credentials (optional)
       defaultMargins: 0 10 0 0
@@ -38,9 +38,7 @@ settings:
           name: elasticsearchPassword
           inputType: password
           width: 163
-
-    - type: spacer
-
+          
     - type: string
       name: kibanaHost
       caption: Kibana Host
@@ -63,6 +61,9 @@ onAfterRedeployContainer [target]:
 onAfterScaleOut [target]:
   installFilebeat: ${event.response.nodes.join(id,)}
 
+onUninstall:
+  cmd [target]: yum remove filebeat
+  
 actions:
   installFilebeat:
     - addSigninKey: ${this}
