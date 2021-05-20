@@ -63,6 +63,7 @@ onAfterScaleOut [target]:
 
 onUninstall:
   cmd [target]: yum remove filebeat
+  user: root
   
 actions:
   installFilebeat:
