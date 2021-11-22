@@ -16,7 +16,7 @@ settings:
   fields:
     - type: string
       name: elasticsearchHost
-      caption: Elasticsearch Host
+      caption: OpenSearch (Elasticsearch) Host
       placeholder: 0.0.0.0:9200
       required: true
       
@@ -41,8 +41,14 @@ settings:
           
     - type: string
       name: kibanaHost
-      caption: Kibana Host
+      caption: OpenSearch Dashboards (Kibana) Host
       placeholder: 0.0.0.0:5601
+      required: true
+      
+    - type: string
+      name: logstashHost
+      caption: Logstash Host
+      placeholder: 0.0.0.0:5044
       required: true
       
     - type: list
