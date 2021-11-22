@@ -117,6 +117,7 @@ actions:
     - cmd [${this}]: |-
         sed -i 's/#host:[[:space:]]*"localhost:5601"/host: "${settings.kibanaHost}"/g' ${globals.configPath};
         sed -i 's/hosts:[[:space:]]*\["localhost:9200"\]/hosts: ["${settings.elasticsearchHost}"]/g' ${globals.configPath};
+        sed -i 's/#protocol: "https"/protocol: "https"/g' ${globals.configPath};
       user: root
       
     - if ('${settings.elasticsearchUser:}'):
