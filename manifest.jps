@@ -102,7 +102,7 @@ actions:
   addServiceToSudoers:
     - set:
         body: |
-          Cmnd_Alias FILEBEAT_SERVICE = /sbin/service filebeat *, /usr/bin/systemctl * filebeat, /usr/bin/systemctl * filebeat.service, /etc/init.d/filebeat *
+          Cmnd_Alias FILEBEAT_SERVICE = /sbin/service filebeat *, /usr/bin/systemctl * filebeat, /usr/bin/systemctl * filebeat.service, /etc/init.d/filebeat *, filebeat *
           %ssh-access ALL = NOPASSWD: FILEBEAT_SERVICE
     - cmd [${this}]: echo '${this.body}' > /etc/sudoers.d/filebeat
       user: root
