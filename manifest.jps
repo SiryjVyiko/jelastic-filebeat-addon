@@ -44,6 +44,15 @@ settings:
       caption: Kibana Host
       placeholder: 0.0.0.0:5601
       required: true
+      
+    - type: list
+      name: beatsossversion
+      caption: Beats OSS version
+      values:
+        value1: 7.12.1
+        value2: latest
+      hideLabel: false
+      hidden: false
 
 globals:
   configPath: /etc/filebeat/filebeat.yml
@@ -109,7 +118,7 @@ actions:
 
   installAgent:
     cmd [${this}]: |-
-      yum install filebeat
+      yum install filebeat-oss
       systemctl enable filebeat
     user: root
     
