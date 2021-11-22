@@ -49,8 +49,8 @@ settings:
       name: beatsossversion
       caption: Beats OSS version
       values:
-        value1: 7.12.1
-        value2: latest
+        7.12.1: 7.12.1
+        latest: latest
       hideLabel: false
       hidden: false
 
