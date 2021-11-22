@@ -78,7 +78,9 @@ actions:
     user: root
   
   addToExtendPerm:
-    cmd [${this}]: sed -i 's|common |common /etc/filebeat;|g' /etc/jelastic/extendperm.conf
+    cmd [${this}]: |- 
+      sed -i 's|common |common /etc/filebeat;|g' /etc/jelastic/extendperm.conf;
+      jem filemanager extendperm;
     user: root
 
   createYumRepo:
