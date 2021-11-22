@@ -135,7 +135,8 @@ actions:
           'apache.*': [ 'apache' ],
           'redis.*': [ 'redis' ],
           'postgres.*': [ 'postgresql' ],
-          'mysql.*|mariadb.*': [ 'mysql' ]
+          'mysql.*|mariadb.*|percona.*': [ 'mysql' ],
+          'tomcat.*|tomee.*': [ 'tomcat' ]
         };
 
         for (var pattern in nodeTypeModules) {
