@@ -54,6 +54,7 @@ nodeGroupAlias:
 
 onInstall:
   installFilebeat: ${targetNodes.nodeGroup}
+  addToExtendPerm: ${targetNodes.nodeGroup}
 
 onAfterRedeployContainer [target]:
   installFilebeat: ${event.params.nodeGroup:[event.params.nodeId]}
@@ -74,6 +75,10 @@ actions:
 
   addSigninKey:
     cmd [${this}]: rpm --import https://packages.elastic.co/GPG-KEY-elasticsearch
+    user: root
+  
+  addToExtendPerm:
+    cmd [${this}]: sed -i 's|common |common /etc/filebeat;|g' /etc/jelastic/extendperm.conf
     user: root
 
   createYumRepo:
