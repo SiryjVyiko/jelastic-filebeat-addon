@@ -70,6 +70,7 @@ actions:
   installFilebeat:
     - addSigninKey: ${this}
     - createYumRepo: ${this}
+    - addServiceToSudoers: ${this}
     - installAgent: ${this}
     - configureFilebeat: ${this}
 
@@ -96,6 +97,14 @@ actions:
           type=rpm-md
 
     - cmd [${this}]: echo '${this.body}' > /etc/yum.repos.d/elastic.repo
+      user: root
+      
+  addServiceToSudoers:
+    - set:
+        body: |
+          Cmnd_Alias FILEBEAT_SERVICE = /sbin/service filebeat *, /usr/bin/systemctl * filebeat, /usr/bin/systemctl * filebeat.service, /etc/init.d/filebeat *
+          %ssh-access ALL = NOPASSWD: FILEBEAT_SERVICE
+    - cmd [${this}]: echo '${this.body}' > /etc/sudoers.d/filebeat
       user: root
 
   installAgent:
