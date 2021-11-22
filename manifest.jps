@@ -107,6 +107,7 @@ actions:
         cmd [${this}]: |-
           sed -i 's/#username:[[:space:]]*"elastic"/username: "${settings.elasticsearchUser}"/g' ${globals.configPath};
           sed -i 's/#password:[[:space:]]*"changeme"/password: "${settings.elasticsearchPassword:}"/g' ${globals.configPath};
+        user: root
           
     - script: |
         var fbModules = ['${globals.defaultModules}'];
@@ -132,4 +133,4 @@ actions:
         filebeat modules enable ${response.modules}
         filebeat setup
         service filebeat start
-      user: root        
+      user: root
