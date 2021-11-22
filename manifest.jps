@@ -49,7 +49,7 @@ settings:
       name: logstashHost
       caption: Logstash Host
       placeholder: 0.0.0.0:5044
-      required: true
+      required: false
       
     - type: list
       name: beatsossversion
