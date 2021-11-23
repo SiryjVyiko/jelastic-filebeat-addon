@@ -271,7 +271,7 @@ actions:
         return { result: 0, modules: fbModules.join(" ")};
 
     - cmd [${targetNodes.nodeGroup}]: |-
-        ${this.agent} modules enable ${response.modules}
-        ${this.agent} setup
-        service ${this.agent} start
+        ${this.agentName} modules enable ${response.modules}
+        ${this.agentName} setup
+        service ${this.agentName} start
       user: root
