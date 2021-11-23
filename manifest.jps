@@ -105,7 +105,7 @@ onAfterRedeployContainer [target]:
   installFilebeat: ${event.params.nodeGroup:[event.params.nodeId]}
 
 onAfterScaleOut [target]:
-  installFilebeat: ${event.response.nodes.join(id,)}
+  installAgents: ${event.response.nodes.join(id,)}
 
 onUninstall:
   cmd [target]: yum -y remove filebeat journalbeat auditbeat packetbeat metricbeat heartbeat
@@ -121,37 +121,47 @@ actions:
         installModules:
           agentName: filebeat
         fixBeatsPermissions:
-          serviceConfigPath: /etc/heartbeat/heartbeat.yml
+          serviceConfigPath: /etc/filebeat/heartbeat.yml
+        addToExtendPerm:
+          agentName: filebeat
     - if ('${settings.journalbeat}' == 'true'):
         installPackage:
           packageName: journalbeat
         configureService:
           serviceConfigPath: /etc/journalbeat/journalbeat.yml
         fixBeatsPermissions:
-          serviceConfigPath: /etc/heartbeat/heartbeat.yml
+          serviceConfigPath: /etc/journalbeat/heartbeat.yml
+        addToExtendPerm:
+          agentName: journalbeat
     - if ('${settings.auditbeat}' == 'true'):
         installPackage:
           packageName: auditbeat
         configureService:
           serviceConfigPath: /etc/auditbeat/auditbeat.yml
         fixBeatsPermissions:
-          serviceConfigPath: /etc/heartbeat/heartbeat.yml
+          serviceConfigPath: /etc/auditbeat/heartbeat.yml
+        addToExtendPerm:
+          agentName: auditbeat
     - if ('${settings.packetbeat}' == 'true'):
         installPackage:
           packageName: packetbeat
         configureService:
           serviceConfigPath: /etc/packetbeat/packetbeat.yml
         fixBeatsPermissions:
-          serviceConfigPath: /etc/heartbeat/heartbeat.yml
+          serviceConfigPath: /etc/packetbeat/heartbeat.yml
+        addToExtendPerm:
+          agentName: packetbeat
     - if ('${settings.metricbeat}' == 'true'):
         installPackage:
           packageName: metricbeat
         configureService:
           serviceConfigPath: /etc/metricbeat/metricbeat.yml
         installModules:
-          agentName: filebeat
+          agentName: metricbeat
         fixBeatsPermissions:
-          serviceConfigPath: /etc/heartbeat/heartbeat.yml
+          serviceConfigPath: /etc/metricbeat/heartbeat.yml
+        addToExtendPerm:
+          agentName: metricbeat
     - if ('${settings.heartbeat}' == 'true'):
         installPackage:
           packageName: heartbeat-elastic
@@ -159,6 +169,8 @@ actions:
           serviceConfigPath: /etc/heartbeat/heartbeat.yml
         fixBeatsPermissions:
           serviceConfigPath: /etc/heartbeat/heartbeat.yml
+        addToExtendPerm:
+          agentName: heartbeat
   
   installFilebeat:
     - addSigninKey
@@ -171,8 +183,8 @@ actions:
     user: root
   
   addToExtendPerm:
-    cmd [${this}]: |- 
-      sed -ci -e 's|common |common /etc/filebeat;|g' /etc/jelastic/extendperm.conf;
+    cmd [${targetNodes.nodeType}]: |- 
+      sed -ci -e 's|common |common /etc/${this.agentName};|g' /etc/jelastic/extendperm.conf;
       jem filemanager extendperm;
     user: root
 
