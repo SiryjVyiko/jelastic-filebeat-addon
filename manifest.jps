@@ -146,7 +146,7 @@ actions:
         - cmd [${this}]: |-
             sed -i 's/#host:[[:space:]]*"localhost:5601"/host: "${settings.kibanaHost}"/g' ${globals.configPath};
           user: root
-    - if ('${settings.kibanaHost:}'):
+    - if ('${settings.logstashHost:}'):
         - cmd [${this}]: |-
             sed -i 's/#output.logstash:/output.logstash:/g' ${globals.configPath};
             sed -i 's/#hosts: ["localhost:5044"]/hosts: ["${settings.logstashHost}:5044"]/g' ${globals.configPath};
