@@ -151,6 +151,7 @@ actions:
     - else:
         - cmd [${this}]: |-
             sed -i 's/^[[:space:]]*output.elasticsearch:/#output.elasticsearch:/g' ${globals.configPath};
+            sed -i 's/^[[:space:]]*hosts:[[:space:]]*\["localhost:9200"\]/#hosts: ["localhost:9200"]/g' ${globals.configPath};
           user: root
         - if ('${settings.logstashHost:}'):
             - cmd [${this}]: |-
