@@ -14,6 +14,35 @@ targetNodes: any
 
 settings:
   fields:
+    - type: checkboxlist
+      caption: Installed agents
+      name: options
+      columns: 2
+      values:
+        - name: filebeat
+          caption: Filebeat
+          value: true
+
+        - name: journalbeat
+          caption: Journalbeat
+          value: false
+
+        - name: auditbeat
+          caption: Auditbeat
+          value: false
+          
+        - name: packetbeat
+          caption: Packetbeat
+          value: false
+
+        - name: metricbeat
+          caption: Metribeat
+          value: false
+
+        - name: heartbeat
+          caption: Heartbeat
+          value: false
+  
     - type: string
       name: elasticsearchHost
       caption: OpenSearch (Elasticsearch) Host (optional)
