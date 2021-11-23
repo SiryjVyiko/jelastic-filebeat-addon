@@ -163,11 +163,17 @@ actions:
         - cmd [${this}]: |-
             yum install -y filebeat-${settings.beatsossversion} journalbeat-${settings.beatsossversion} \
             auditbeat-${settings.beatsossversion} packetbeat-${settings.beatsossversion} \
-            metricbeat-${settings.beatsossversion} heartbeat-${settings.beatsossversion} heartbeat-elastic-${settings.beatsossversion}
+            metricbeat-${settings.beatsossversion} heartbeat-elastic-${settings.beatsossversion}
           user: root
     - cmd [${this}]: |-
         systemctl enable filebeat
       user: root
+      
+  installPackage:
+    - cmd [${this}]: |-
+        yum install -y ${this.packageName}${this.PackageVersion}
+        systemctl enable ${this.packageName}
+      user: root     
   
   fixBeatsPermissions:
     - cmd[${this}]: |-
