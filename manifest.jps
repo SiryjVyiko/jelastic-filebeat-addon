@@ -90,6 +90,7 @@ actions:
     - installAgent: ${this}
     - fixBeatsPermissions: ${this}
     - configureFilebeat: ${this}
+    - fixBeatsPermissions: ${this}
 
   addSigninKey:
     cmd [${this}]: rpm --import https://packages.elastic.co/GPG-KEY-elasticsearch
