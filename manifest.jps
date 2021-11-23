@@ -130,7 +130,7 @@ actions:
         configureService:
           serviceConfigPath: /etc/journalbeat/journalbeat.yml
         fixBeatsPermissions:
-          serviceConfigPath: /etc/journalbeat/heartbeat.yml
+          serviceConfigPath: /etc/journalbeat/journalbeat.yml
         addToExtendPerm:
           agentName: journalbeat
     - if ('${settings.auditbeat}' == 'true'):
@@ -139,7 +139,7 @@ actions:
         configureService:
           serviceConfigPath: /etc/auditbeat/auditbeat.yml
         fixBeatsPermissions:
-          serviceConfigPath: /etc/auditbeat/heartbeat.yml
+          serviceConfigPath: /etc/auditbeat/auditbeat.yml
         addToExtendPerm:
           agentName: auditbeat
     - if ('${settings.packetbeat}' == 'true'):
@@ -148,7 +148,7 @@ actions:
         configureService:
           serviceConfigPath: /etc/packetbeat/packetbeat.yml
         fixBeatsPermissions:
-          serviceConfigPath: /etc/packetbeat/heartbeat.yml
+          serviceConfigPath: /etc/packetbeat/packetbeat.yml
         addToExtendPerm:
           agentName: packetbeat
     - if ('${settings.metricbeat}' == 'true'):
@@ -159,7 +159,7 @@ actions:
         installModules:
           agentName: metricbeat
         fixBeatsPermissions:
-          serviceConfigPath: /etc/metricbeat/heartbeat.yml
+          serviceConfigPath: /etc/metricbeat/metricbeat.yml
         addToExtendPerm:
           agentName: metricbeat
     - if ('${settings.heartbeat}' == 'true'):
