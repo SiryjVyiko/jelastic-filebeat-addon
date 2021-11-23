@@ -128,11 +128,11 @@ actions:
   installAgent:
     - if ('${settings.beatsossversion}' == 'latest'):
         - cmd [${this}]: |-
-            yum install filebeat
+            yum install filebeat journalbeat auditbeat
           user: root
     - else:
         - cmd [${this}]: |-
-            yum install filebeat-${settings.beatsossversion}
+            yum install filebeat-${settings.beatsossversion} journalbeat-${settings.beatsossversion} auditbeat-${settings.beatsossversion}
           user: root
     - cmd [${this}]: |-
         systemctl enable filebeat
