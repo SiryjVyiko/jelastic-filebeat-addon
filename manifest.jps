@@ -124,6 +124,8 @@ actions:
           serviceConfigPath: /etc/filebeat/filebeat.yml
         addToExtendPerm:
           agentName: filebeat
+        addServiceToSudoers:
+          agentName: filebeat
     - if ('${settings.journalbeat}' == 'true'):
         installPackage:
           packageName: journalbeat
@@ -132,6 +134,8 @@ actions:
         fixBeatsPermissions:
           serviceConfigPath: /etc/journalbeat/journalbeat.yml
         addToExtendPerm:
+          agentName: journalbeat
+        addServiceToSudoers:
           agentName: journalbeat
     - if ('${settings.auditbeat}' == 'true'):
         installPackage:
@@ -142,6 +146,8 @@ actions:
           serviceConfigPath: /etc/auditbeat/auditbeat.yml
         addToExtendPerm:
           agentName: auditbeat
+        addServiceToSudoers:
+          agentName: auditbeat
     - if ('${settings.packetbeat}' == 'true'):
         installPackage:
           packageName: packetbeat
@@ -150,6 +156,8 @@ actions:
         fixBeatsPermissions:
           serviceConfigPath: /etc/packetbeat/packetbeat.yml
         addToExtendPerm:
+          agentName: packetbeat
+        addServiceToSudoers:
           agentName: packetbeat
     - if ('${settings.metricbeat}' == 'true'):
         installPackage:
@@ -162,6 +170,8 @@ actions:
           serviceConfigPath: /etc/metricbeat/metricbeat.yml
         addToExtendPerm:
           agentName: metricbeat
+        addServiceToSudoers:
+          agentName: metricbeat
     - if ('${settings.heartbeat}' == 'true'):
         installPackage:
           packageName: heartbeat-elastic
@@ -170,6 +180,8 @@ actions:
         fixBeatsPermissions:
           serviceConfigPath: /etc/heartbeat/heartbeat.yml
         addToExtendPerm:
+          agentName: heartbeat
+        addServiceToSudoers:
           agentName: heartbeat
   
   installFilebeat:
@@ -206,9 +218,9 @@ actions:
   addServiceToSudoers:
     - set:
         body: |
-          Cmnd_Alias FILEBEAT_SERVICE = /sbin/service filebeat *, /usr/bin/systemctl * filebeat, /usr/bin/systemctl * filebeat.service, /etc/init.d/filebeat *, filebeat *
-          %ssh-access ALL = NOPASSWD: FILEBEAT_SERVICE
-    - cmd [${targetNodes.nodeType}]: echo '${this.body}' > /etc/sudoers.d/filebeat
+          Cmnd_Alias ${this.agentName}_SERVICE = /sbin/service ${this.agentName} *, /usr/bin/systemctl * ${this.agentName}, /usr/bin/systemctl * ${this.agentName}.service, /etc/init.d/${this.agentName} *, ${this.agentName} *
+          %ssh-access ALL = NOPASSWD: ${this.agentName}_SERVICE
+    - cmd [${targetNodes.nodeType}]: echo '${this.body}' > /etc/sudoers.d/${this.agentName}
       user: root
       
   installPackage:
