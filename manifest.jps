@@ -88,6 +88,7 @@ actions:
     - createYumRepo: ${this}
     - addServiceToSudoers: ${this}
     - installAgent: ${this}
+    - fixBeatsPermissions: ${this}
     - configureFilebeat: ${this}
 
   addSigninKey:
@@ -135,6 +136,11 @@ actions:
     - cmd [${this}]: |-
         systemctl enable filebeat
       user: root
+  
+  fixBeatsPermissions:
+    - cmd[${this}]: |-
+        chmod go-w ${globals.configPath};
+      user: root
     
   configureFilebeat:
     - if ('${settings.elasticsearchHost:}'):
@@ -142,14 +148,18 @@ actions:
             sed -i 's/hosts:[[:space:]]*\["localhost:9200"\]/hosts: ["${settings.elasticsearchHost}"]/g' ${globals.configPath};
             sed -i 's/#protocol: "https"/protocol: "http[s]*"/g' ${globals.configPath};
           user: root
+    - else:
+        - cmd [${this}]: |-
+            sed -i 's/^[[:space:]]*output.elasticsearch:/#output.elasticsearch:/g' ${globals.configPath};
+          user: root
+        - if ('${settings.logstashHost:}'):
+            - cmd [${this}]: |-
+                sed -i 's/#output.logstash:/output.logstash:/g' ${globals.configPath};
+                sed -i 's/#hosts:[[:space:]]*\["localhost:5044"\]/hosts: \["${settings.logstashHost}"\]/g' ${globals.configPath};
+              user: root
     - if ('${settings.kibanaHost:}'):
         - cmd [${this}]: |-
             sed -i 's/#host:[[:space:]]*"localhost:5601"/host: "${settings.kibanaHost}"/g' ${globals.configPath};
-          user: root
-    - if ('${settings.logstashHost:}'):
-        - cmd [${this}]: |-
-            sed -i 's/#output.logstash:/output.logstash:/g' ${globals.configPath};
-            sed -i 's/#hosts:[[:space:]]*\["localhost:5044"\]/hosts: \["${settings.logstashHost}"\]/g' ${globals.configPath};
           user: root
     - if ('${settings.elasticsearchUser:}'):
         - cmd [${this}]: |-
