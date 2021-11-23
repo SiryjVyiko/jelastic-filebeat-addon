@@ -117,32 +117,32 @@ actions:
         installPackage:
           packageName: filebeat
         configureService:
-          serviceConfigPath: /etc/filebeat/filebeat.conf
+          serviceConfigPath: /etc/filebeat/filebeat.yml
     - if ('${settings.journalbeat}' == 'true'):
         installPackage:
           packageName: journalbeat
         configureService:
-          serviceConfigPath: /etc/journalbeat/journalbeat.conf
+          serviceConfigPath: /etc/journalbeat/journalbeat.yml
     - if ('${settings.auditbeat}' == 'true'):
         installPackage:
           packageName: auditbeat
         configureService:
-          serviceConfigPath: /etc/auditbeat/auditbeat.conf
+          serviceConfigPath: /etc/auditbeat/auditbeat.yml
     - if ('${settings.packetbeat}' == 'true'):
         installPackage:
           packageName: packetbeat
         configureService:
-          serviceConfigPath: /etc/packetbeat/packetbeat.conf
+          serviceConfigPath: /etc/packetbeat/packetbeat.yml
     - if ('${settings.metricbeat}' == 'true'):
         installPackage:
           packageName: metricbeat
         configureService:
-          serviceConfigPath: /etc/metricbeat/metricbeat.conf
+          serviceConfigPath: /etc/metricbeat/metricbeat.yml
     - if ('${settings.heartbeat}' == 'true'):
         installPackage:
           packageName: heartbeat-elastic
         configureService:
-          serviceConfigPath: /etc/heartbeat/heartbeat.conf
+          serviceConfigPath: /etc/heartbeat/heartbeat.yml
   
   installFilebeat:
     - addSigninKey: ${this}
