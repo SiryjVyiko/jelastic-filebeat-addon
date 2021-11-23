@@ -149,9 +149,8 @@ actions:
     - if ('${settings.logstashHost:}'):
         - cmd [${this}]: |-
             sed -i 's/#output.logstash:/output.logstash:/g' ${globals.configPath};
-            sed -i 's/#hosts: ["localhost:5044"]/hosts: ["${settings.logstashHost}:5044"]/g' ${globals.configPath};
+            sed -i 's/#hosts:[[:space:]]*\["localhost:5044"\]/hosts: \["${settings.logstashHost}"\]/g' ${globals.configPath};
           user: root
-      
     - if ('${settings.elasticsearchUser:}'):
         - cmd [${this}]: |-
             sed -i 's/#username:[[:space:]]*"elastic"/username: "${settings.elasticsearchUser}"/g' ${globals.configPath};
