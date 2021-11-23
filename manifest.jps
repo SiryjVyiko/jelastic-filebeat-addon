@@ -186,6 +186,32 @@ actions:
     - cmd[${this}]: |-
         chmod go-w ${globals.configPath};
       user: root
+      
+ configureService:
+    - if ('${settings.elasticsearchHost:}'):
+        - cmd [${this}]: |-
+            sed -ci -e 's/hosts:[[:space:]]*\["localhost:9200"\]/hosts: ["${settings.elasticsearchHost}"]/g' ${this.serviceConfigPath};
+            sed -ci -e 's/#protocol: "https"/protocol: "http[s]*"/g' ${globals.configPath};
+          user: root
+    - else:
+        - cmd [${this}]: |-
+            sed -ci -e 's/^[[:space:]]*output.elasticsearch:/#output.elasticsearch:/g' ${globals.configPath};
+            sed -ci -e 's/^[[:space:]]*hosts:[[:space:]]*\["localhost:9200"\]/#hosts: ["localhost:9200"]/g' ${this.serviceConfigPath};
+          user: root
+        - if ('${settings.logstashHost:}'):
+            - cmd [${this}]: |-
+                sed -ci -e 's/#output.logstash:/output.logstash:/g' ${globals.configPath};
+                sed -ci -e 's/#hosts:[[:space:]]*\["localhost:5044"\]/hosts: \["${settings.logstashHost}"\]/g' ${this.serviceConfigPath};
+              user: root
+    - if ('${settings.kibanaHost:}'):
+        - cmd [${this}]: |-
+            sed -ci -e 's/#host:[[:space:]]*"localhost:5601"/host: "${settings.kibanaHost}"/g' ${this.serviceConfigPath};
+          user: root
+    - if ('${settings.elasticsearchUser:}'):
+        - cmd [${this}]: |-
+            sed -ci -e 's/#username:[[:space:]]*"elastic"/username: "${settings.elasticsearchUser}"/g' ${this.serviceConfigPath};
+            sed -ci -e 's/#password:[[:space:]]*"changeme"/password: "${settings.elasticsearchPassword:}"/g' ${this.serviceConfigPath};
+          user: root
     
   configureFilebeat:
     - if ('${settings.elasticsearchHost:}'):
