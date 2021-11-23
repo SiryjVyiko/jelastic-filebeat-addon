@@ -116,29 +116,39 @@ actions:
     - if ('${settings.filebeat}' == 'true'):
         installPackage:
           packageName: filebeat
+        configureService:
+          packageName: /etc/filebeat/filebeat.conf
     - if ('${settings.journalbeat}' == 'true'):
         installPackage:
           packageName: journalbeat
+        configureService:
+          packageName: /etc/journalbeat/journalbeat.conf
     - if ('${settings.auditbeat}' == 'true'):
         installPackage:
           packageName: auditbeat
+        configureService:
+          packageName: /etc/auditbeat/auditbeat.conf
     - if ('${settings.packetbeat}' == 'true'):
         installPackage:
           packageName: packetbeat
+        configureService:
+          packageName: /etc/packetbeat/packetbeat.conf
     - if ('${settings.metricbeat}' == 'true'):
         installPackage:
           packageName: metricbeat
+        configureService:
+          packageName: /etc/metricbeat/metricbeat.conf
     - if ('${settings.heartbeat}' == 'true'):
         installPackage:
           packageName: heartbeat-elastic
+        configureService:
+          packageName: /etc/heartbeat/heartbeat.conf
   
   installFilebeat:
     - addSigninKey: ${this}
     - createYumRepo: ${this}
     - addServiceToSudoers: ${this}
     - installAgents
-    - fixBeatsPermissions: ${this}
-    - configureFilebeat: ${this}
     - fixBeatsPermissions: ${this}
 
   addSigninKey:
@@ -209,26 +219,26 @@ actions:
       
   configureService:
     - if ('${settings.elasticsearchHost:}'):
-        - cmd [${this}]: |-
+        - cmd [${targetNodes.nodeGroup}]: |-
             sed -ci -e 's/hosts:[[:space:]]*\["localhost:9200"\]/hosts: ["${settings.elasticsearchHost}"]/g' ${this.serviceConfigPath};
             sed -ci -e 's/#protocol: "https"/protocol: "http[s]*"/g' ${globals.configPath};
           user: root
     - else:
-        - cmd [${this}]: |-
+        - cmd [${targetNodes.nodeGroup}]: |-
             sed -ci -e 's/^[[:space:]]*output.elasticsearch:/#output.elasticsearch:/g' ${globals.configPath};
             sed -ci -e 's/^[[:space:]]*hosts:[[:space:]]*\["localhost:9200"\]/#hosts: ["localhost:9200"]/g' ${this.serviceConfigPath};
           user: root
         - if ('${settings.logstashHost:}'):
-            - cmd [${this}]: |-
+            - cmd [${targetNodes.nodeGroup}]: |-
                 sed -ci -e 's/#output.logstash:/output.logstash:/g' ${globals.configPath};
                 sed -ci -e 's/#hosts:[[:space:]]*\["localhost:5044"\]/hosts: \["${settings.logstashHost}"\]/g' ${this.serviceConfigPath};
               user: root
     - if ('${settings.kibanaHost:}'):
-        - cmd [${this}]: |-
+        - cmd [${targetNodes.nodeGroup}]: |-
             sed -ci -e 's/#host:[[:space:]]*"localhost:5601"/host: "${settings.kibanaHost}"/g' ${this.serviceConfigPath};
           user: root
     - if ('${settings.elasticsearchUser:}'):
-        - cmd [${this}]: |-
+        - cmd [${targetNodes.nodeGroup}]: |-
             sed -ci -e 's/#username:[[:space:]]*"elastic"/username: "${settings.elasticsearchUser}"/g' ${this.serviceConfigPath};
             sed -ci -e 's/#password:[[:space:]]*"changeme"/password: "${settings.elasticsearchPassword:}"/g' ${this.serviceConfigPath};
           user: root
