@@ -128,11 +128,11 @@ actions:
   installAgent:
     - if ('${settings.beatsossversion}' == 'latest'):
         - cmd [${this}]: |-
-            yum install filebeat journalbeat auditbeat packetbeat metricbeat heartbeat
+            yum -y install filebeat journalbeat auditbeat packetbeat metricbeat heartbeat
           user: root
     - else:
         - cmd [${this}]: |-
-            yum install filebeat-${settings.beatsossversion} journalbeat-${settings.beatsossversion} \
+            yum install -y filebeat-${settings.beatsossversion} journalbeat-${settings.beatsossversion} \
             auditbeat-${settings.beatsossversion} packetbeat-${settings.beatsossversion} \
             metricbeat-${settings.beatsossversion} heartbeat-${settings.beatsossversion}
           user: root
