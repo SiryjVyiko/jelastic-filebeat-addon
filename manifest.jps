@@ -137,19 +137,26 @@ actions:
       user: root
     
   configureFilebeat:
-    - cmd [${this}]: |-
-        sed -i 's/#host:[[:space:]]*"localhost:5601"/host: "${settings.kibanaHost}"/g' ${globals.configPath};
-        sed -i 's/hosts:[[:space:]]*\["localhost:9200"\]/hosts: ["${settings.elasticsearchHost}"]/g' ${globals.configPath};
-        sed -i 's/#protocol: "https"/protocol: "http[s]*"/g' ${globals.configPath};
-        sed -i 's/#output.logstash:/output.logstash:/g' ${globals.configPath};
-        sed -i 's/#hosts: ["localhost:5044"]/hosts: ["${settings.logstashHost}:5044"]/g' ${globals.configPath};
-      user: root
+    - if ('${settings.elasticsearchHost:}'):
+        - cmd [${this}]: |-
+            sed -i 's/hosts:[[:space:]]*\["localhost:9200"\]/hosts: ["${settings.elasticsearchHost}"]/g' ${globals.configPath};
+            sed -i 's/#protocol: "https"/protocol: "http[s]*"/g' ${globals.configPath};
+          user: root
+    - if ('${settings.kibanaHost:}'):
+        - cmd [${this}]: |-
+            sed -i 's/#host:[[:space:]]*"localhost:5601"/host: "${settings.kibanaHost}"/g' ${globals.configPath};
+          user: root
+    - if ('${settings.kibanaHost:}'):
+        - cmd [${this}]: |-
+            sed -i 's/#output.logstash:/output.logstash:/g' ${globals.configPath};
+            sed -i 's/#hosts: ["localhost:5044"]/hosts: ["${settings.logstashHost}:5044"]/g' ${globals.configPath};
+          user: root
       
     - if ('${settings.elasticsearchUser:}'):
-        cmd [${this}]: |-
-          sed -i 's/#username:[[:space:]]*"elastic"/username: "${settings.elasticsearchUser}"/g' ${globals.configPath};
-          sed -i 's/#password:[[:space:]]*"changeme"/password: "${settings.elasticsearchPassword:}"/g' ${globals.configPath};
-        user: root
+        - cmd [${this}]: |-
+            sed -i 's/#username:[[:space:]]*"elastic"/username: "${settings.elasticsearchUser}"/g' ${globals.configPath};
+            sed -i 's/#password:[[:space:]]*"changeme"/password: "${settings.elasticsearchPassword:}"/g' ${globals.configPath};
+          user: root
           
     - script: |
         var fbModules = ['${globals.defaultModules}'];
