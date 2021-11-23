@@ -187,7 +187,6 @@ actions:
   installFilebeat:
     - addSigninKey
     - createYumRepo
-    - addServiceToSudoers:
     - installAgents
 
   addSigninKey:
