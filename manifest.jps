@@ -207,7 +207,7 @@ actions:
         chmod go-w ${globals.configPath};
       user: root
       
- configureService:
+  configureService:
     - if ('${settings.elasticsearchHost:}'):
         - cmd [${this}]: |-
             sed -ci -e 's/hosts:[[:space:]]*\["localhost:9200"\]/hosts: ["${settings.elasticsearchHost}"]/g' ${this.serviceConfigPath};
