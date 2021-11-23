@@ -121,7 +121,7 @@ actions:
         installModules:
           agentName: filebeat
         fixBeatsPermissions:
-          serviceConfigPath: /etc/filebeat/heartbeat.yml
+          serviceConfigPath: /etc/filebeat/filebeat.yml
         addToExtendPerm:
           agentName: filebeat
     - if ('${settings.journalbeat}' == 'true'):
