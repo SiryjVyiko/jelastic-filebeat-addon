@@ -16,9 +16,9 @@ settings:
   fields:
     - type: string
       name: elasticsearchHost
-      caption: OpenSearch (Elasticsearch) Host
+      caption: OpenSearch (Elasticsearch) Host (optional)
       placeholder: 0.0.0.0:9200
-      required: true
+      required: false
       
     - type: compositefield
       caption: Credentials (optional)
@@ -41,15 +41,15 @@ settings:
           
     - type: string
       name: kibanaHost
-      caption: OpenSearch Dashboards (Kibana) Host
+      caption: OpenSearch Dashboards (Kibana) Host (optional)
       placeholder: 0.0.0.0:5601
-      required: true
+      required: false
       
     - type: string
       name: logstashHost
-      caption: Logstash Host
+      caption: Logstash Host (optional)
       placeholder: 0.0.0.0:5044
-      required: true
+      required: false
       
     - type: list
       name: beatsossversion
