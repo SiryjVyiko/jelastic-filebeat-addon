@@ -108,7 +108,7 @@ onAfterScaleOut [target]:
   installFilebeat: ${event.response.nodes.join(id,)}
 
 onUninstall:
-  cmd [target]: yum remove filebeat
+  cmd [target]: yum -y remove filebeat journalbeat auditbeat packetbeat metricbeat heartbeat
   user: root
   
 actions:
@@ -170,8 +170,15 @@ actions:
       user: root
       
   installPackage:
+    - if ('${settings.beatsossversion}' == 'latest'):
+        - cmd [${this}]: |-
+            yum install -y ${this.packageName}
+          user: root
+    - else:
+        - cmd [${this}]: |-
+            yum install -y ${this.packageName}-${settings.beatsossversion}
+          user: root
     - cmd [${this}]: |-
-        yum install -y ${this.packageName}${this.PackageVersion}
         systemctl enable ${this.packageName}
       user: root     
   
