@@ -220,7 +220,8 @@ actions:
         body: |
           Cmnd_Alias ${this.agentName}_SERVICE = /sbin/service ${this.agentName} *, /usr/bin/systemctl * ${this.agentName}, /usr/bin/systemctl * ${this.agentName}.service, /etc/init.d/${this.agentName} *, ${this.agentName} *
           %ssh-access ALL = NOPASSWD: ${this.agentName}_SERVICE
-    - cmd [${targetNodes.nodeType}]: echo '${this.body}' > /etc/sudoers.d/${this.agentName}
+    - cmd [${targetNodes.nodeType}]: |-
+        echo '${this.body}' > /etc/sudoers.d/${this.agentName}
       user: root
       
   installPackage:
