@@ -130,13 +130,13 @@ actions:
           packageName: metricbeat
     - if ('${settings.heartbeat}' == 'true'):
         installPackage:
-          packageName: heartbeat
+          packageName: heartbeat-elastic
   
   installFilebeat:
     - addSigninKey: ${this}
     - createYumRepo: ${this}
     - addServiceToSudoers: ${this}
-    - installAgent: ${this}
+    - installAgents
     - fixBeatsPermissions: ${this}
     - configureFilebeat: ${this}
     - fixBeatsPermissions: ${this}
@@ -191,14 +191,14 @@ actions:
       
   installPackage:
     - if ('${settings.beatsossversion}' == 'latest'):
-        - cmd [${this}]: |-
+        - cmd [${targetNodes.nodeGroup}]: |-
             yum install -y ${this.packageName}
           user: root
     - else:
-        - cmd [${this}]: |-
+        - cmd [${targetNodes.nodeGroup}]: |-
             yum install -y ${this.packageName}-${settings.beatsossversion}
           user: root
-    - cmd [${this}]: |-
+    - cmd [${targetNodes.nodeGroup}]: |-
         systemctl enable ${this.packageName}
       user: root     
   
