@@ -112,6 +112,26 @@ onUninstall:
   user: root
   
 actions:
+  installAgents:
+    - if ('${settings.filebeat}' == 'true'):
+        installPackage:
+          packageName: filebeat
+    - if ('${settings.journalbeat}' == 'true'):
+        installPackage:
+          packageName: journalbeat
+    - if ('${settings.auditbeat}' == 'true'):
+        installPackage:
+          packageName: auditbeat
+    - if ('${settings.packetbeat}' == 'true'):
+        installPackage:
+          packageName: packetbeat
+    - if ('${settings.metricbeat}' == 'true'):
+        installPackage:
+          packageName: metricbeat
+    - if ('${settings.heartbeat}' == 'true'):
+        installPackage:
+          packageName: heartbeat
+  
   installFilebeat:
     - addSigninKey: ${this}
     - createYumRepo: ${this}
