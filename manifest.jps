@@ -117,111 +117,111 @@ actions:
     - addSigninKey
     - createYumRepo
     - installAgents:
-        affectedNodes: ${settings.affectedNodes}
+        affectedNodes: ${this.affectedNodes}
  
   installAgents:
     - if ('${settings.filebeat}' == 'true'):
         installPackage:
           packageName: filebeat
-          affectedNodes: ${settings.affectedNodes}
+          affectedNodes: ${this.affectedNodes}
         configureService:
           serviceConfigPath: /etc/filebeat/filebeat.yml
-          affectedNodes: ${settings.affectedNodes}
+          affectedNodes: ${this.affectedNodes}
         installModules:
           agentName: filebeat
-          affectedNodes: ${settings.affectedNodes}
+          affectedNodes: ${this.affectedNodes}
         fixBeatsPermissions:
           serviceConfigPath: /etc/filebeat/filebeat.yml
-          affectedNodes: ${settings.affectedNodes}
+          affectedNodes: ${this.affectedNodes}
         addToExtendPerm:
           agentName: filebeat
-          affectedNodes: ${settings.affectedNodes}
+          affectedNodes: ${this.affectedNodes}
         addServiceToSudoers:
           agentName: filebeat
-          affectedNodes: ${settings.affectedNodes}
+          affectedNodes: ${this.affectedNodes}
     - if ('${settings.journalbeat}' == 'true'):
         installPackage:
           packageName: journalbeat
-          affectedNodes: ${settings.affectedNodes}
+          affectedNodes: ${this.affectedNodes}
         configureService:
           serviceConfigPath: /etc/journalbeat/journalbeat.yml
-          affectedNodes: ${settings.affectedNodes}
+          affectedNodes: ${this.affectedNodes}
         fixBeatsPermissions:
           serviceConfigPath: /etc/journalbeat/journalbeat.yml
-          affectedNodes: ${settings.affectedNodes}
+          affectedNodes: ${this.affectedNodes}
         addToExtendPerm:
           agentName: journalbeat
-          affectedNodes: ${settings.affectedNodes}
+          affectedNodes: ${this.affectedNodes}
         addServiceToSudoers:
           agentName: journalbeat
-          affectedNodes: ${settings.affectedNodes}
+          affectedNodes: ${this.affectedNodes}
     - if ('${settings.auditbeat}' == 'true'):
         installPackage:
           packageName: auditbeat
-          affectedNodes: ${settings.affectedNodes}
+          affectedNodes: ${this.affectedNodes}
         configureService:
           serviceConfigPath: /etc/auditbeat/auditbeat.yml
-          affectedNodes: ${settings.affectedNodes}
+          affectedNodes: ${this.affectedNodes}
         fixBeatsPermissions:
           serviceConfigPath: /etc/auditbeat/auditbeat.yml
-          affectedNodes: ${settings.affectedNodes}
+          affectedNodes: ${this.affectedNodes}
         addToExtendPerm:
           agentName: auditbeat
-          affectedNodes: ${settings.affectedNodes}
+          affectedNodes: ${this.affectedNodes}
         addServiceToSudoers:
           agentName: auditbeat
-          affectedNodes: ${settings.affectedNodes}
+          affectedNodes: ${this.affectedNodes}
     - if ('${settings.packetbeat}' == 'true'):
         installPackage:
           packageName: packetbeat
-          affectedNodes: ${settings.affectedNodes}
+          affectedNodes: ${this.affectedNodes}
         configureService:
           serviceConfigPath: /etc/packetbeat/packetbeat.yml
-          affectedNodes: ${settings.affectedNodes}
+          affectedNodes: ${this.affectedNodes}
         fixBeatsPermissions:
           serviceConfigPath: /etc/packetbeat/packetbeat.yml
-          affectedNodes: ${settings.affectedNodes}
+          affectedNodes: ${this.affectedNodes}
         addToExtendPerm:
           agentName: packetbeat
-          affectedNodes: ${settings.affectedNodes}
+          affectedNodes: ${this.affectedNodes}
         addServiceToSudoers:
           agentName: packetbeat
-          affectedNodes: ${settings.affectedNodes}
+          affectedNodes: ${this.affectedNodes}
     - if ('${settings.metricbeat}' == 'true'):
         installPackage:
           packageName: metricbeat
-          affectedNodes: ${settings.affectedNodes}
+          affectedNodes: ${this.affectedNodes}
         configureService:
           serviceConfigPath: /etc/metricbeat/metricbeat.yml
-          affectedNodes: ${settings.affectedNodes}
+          affectedNodes: ${this.affectedNodes}
         installModules:
           agentName: metricbeat
-          affectedNodes: ${settings.affectedNodes}
+          affectedNodes: ${this.affectedNodes}
         fixBeatsPermissions:
           serviceConfigPath: /etc/metricbeat/metricbeat.yml
-          affectedNodes: ${settings.affectedNodes}
+          affectedNodes: ${this.affectedNodes}
         addToExtendPerm:
           agentName: metricbeat
-          affectedNodes: ${settings.affectedNodes}
+          affectedNodes: ${this.affectedNodes}
         addServiceToSudoers:
           agentName: metricbeat
-          affectedNodes: ${settings.affectedNodes}
+          affectedNodes: ${this.affectedNodes}
     - if ('${settings.heartbeat}' == 'true'):
         installPackage:
           packageName: heartbeat-elastic
-          affectedNodes: ${settings.affectedNodes}
+          affectedNodes: ${this.affectedNodes}
         configureService:
           serviceConfigPath: /etc/heartbeat/heartbeat.yml
-          affectedNodes: ${settings.affectedNodes}
+          affectedNodes: ${this.affectedNodes}
         fixBeatsPermissions:
           serviceConfigPath: /etc/heartbeat/heartbeat.yml
-          affectedNodes: ${settings.affectedNodes}
+          affectedNodes: ${this.affectedNodes}
         addToExtendPerm:
           agentName: heartbeat
-          affectedNodes: ${settings.affectedNodes}
+          affectedNodes: ${this.affectedNodes}
         addServiceToSudoers:
           agentName: heartbeat
-          affectedNodes: ${settings.affectedNodes}
+          affectedNodes: ${this.affectedNodes}
 
   addSigninKey:
     cmd [${targetNodes.nodeType}]: rpm --import https://packages.elastic.co/GPG-KEY-elasticsearch
