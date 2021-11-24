@@ -1,13 +1,12 @@
 type: update
-name: Filebeat
-id: filebeat
+name: Elastic Beats
+id: elasticbeats
 
 logo: https://iconape.com/wp-content/png_logo_vector/elastic-beats.png
 description:
-  short: 'Filebeat: lightweight shipper for forwarding and centralizing log data'
+  short: 'Elastic Beats: Lightweight data shippers'
   text: |
-    Filebeat is a lightweight shipper for forwarding and centralizing log data.
-    Installed as an agent on your servers, Filebeat monitors the log files or locations that you specify, collects log events, and forwards them either to [Elasticsearch](https://www.elastic.co/products/elasticsearch) or [Logstash](https://www.elastic.co/products/logstash) for indexing.
+    Beats is a free and open platform for single-purpose data shippers. They send data from nodes of your environments to Logstash or OpneSearch (Elasticsearch).
 homepage: https://www.elastic.co/beats/filebeat
 
 targetNodes: any
