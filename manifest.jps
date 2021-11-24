@@ -93,14 +93,18 @@ nodeGroupAlias:
   ${targetNodes.nodeGroup}: target
 
 onInstall:
-  installFilebeat: ${targetNodes.nodeGroup}
-  addToExtendPerm: ${targetNodes.nodeGroup}
+  installBeats: 
+    affectedNodes: ${targetNodes.nodeGroup}
+  addToExtendPerm: 
+    affectedNodes: ${targetNodes.nodeGroup}
 
 onAfterRedeployContainer [target]:
-  installAgents: ${event.params.nodeGroup:[event.params.nodeId]}
+  installAgents: 
+    affectedNodes: ${event.params.nodeGroup:[event.params.nodeId]}
 
 onAfterScaleOut [target]:
-  installAgents: ${event.response.nodes.join(id,)}
+  installAgents: 
+    affectedNodes: ${event.response.nodes.join(id,)}
 
 onUninstall:
   cmd [target]: |- 
@@ -109,89 +113,122 @@ onUninstall:
   user: root
   
 actions:
+  installBeats:
+    - addSigninKey
+    - createYumRepo
+    - installAgents
+        affectedNodes: ${settings.affectedNodes}
+ 
   installAgents:
     - if ('${settings.filebeat}' == 'true'):
         installPackage:
           packageName: filebeat
+          affectedNodes: ${settings.affectedNodes}
         configureService:
           serviceConfigPath: /etc/filebeat/filebeat.yml
+          affectedNodes: ${settings.affectedNodes}
         installModules:
           agentName: filebeat
+          affectedNodes: ${settings.affectedNodes}
         fixBeatsPermissions:
           serviceConfigPath: /etc/filebeat/filebeat.yml
+          affectedNodes: ${settings.affectedNodes}
         addToExtendPerm:
           agentName: filebeat
+          affectedNodes: ${settings.affectedNodes}
         addServiceToSudoers:
           agentName: filebeat
+          affectedNodes: ${settings.affectedNodes}
     - if ('${settings.journalbeat}' == 'true'):
         installPackage:
           packageName: journalbeat
+          affectedNodes: ${settings.affectedNodes}
         configureService:
           serviceConfigPath: /etc/journalbeat/journalbeat.yml
+          affectedNodes: ${settings.affectedNodes}
         fixBeatsPermissions:
           serviceConfigPath: /etc/journalbeat/journalbeat.yml
+          affectedNodes: ${settings.affectedNodes}
         addToExtendPerm:
           agentName: journalbeat
+          affectedNodes: ${settings.affectedNodes}
         addServiceToSudoers:
           agentName: journalbeat
+          affectedNodes: ${settings.affectedNodes}
     - if ('${settings.auditbeat}' == 'true'):
         installPackage:
           packageName: auditbeat
+          affectedNodes: ${settings.affectedNodes}
         configureService:
           serviceConfigPath: /etc/auditbeat/auditbeat.yml
+          affectedNodes: ${settings.affectedNodes}
         fixBeatsPermissions:
           serviceConfigPath: /etc/auditbeat/auditbeat.yml
+          affectedNodes: ${settings.affectedNodes}
         addToExtendPerm:
           agentName: auditbeat
+          affectedNodes: ${settings.affectedNodes}
         addServiceToSudoers:
           agentName: auditbeat
+          affectedNodes: ${settings.affectedNodes}
     - if ('${settings.packetbeat}' == 'true'):
         installPackage:
           packageName: packetbeat
+          affectedNodes: ${settings.affectedNodes}
         configureService:
           serviceConfigPath: /etc/packetbeat/packetbeat.yml
+          affectedNodes: ${settings.affectedNodes}
         fixBeatsPermissions:
           serviceConfigPath: /etc/packetbeat/packetbeat.yml
+          affectedNodes: ${settings.affectedNodes}
         addToExtendPerm:
           agentName: packetbeat
+          affectedNodes: ${settings.affectedNodes}
         addServiceToSudoers:
           agentName: packetbeat
+          affectedNodes: ${settings.affectedNodes}
     - if ('${settings.metricbeat}' == 'true'):
         installPackage:
           packageName: metricbeat
+          affectedNodes: ${settings.affectedNodes}
         configureService:
           serviceConfigPath: /etc/metricbeat/metricbeat.yml
+          affectedNodes: ${settings.affectedNodes}
         installModules:
           agentName: metricbeat
+          affectedNodes: ${settings.affectedNodes}
         fixBeatsPermissions:
           serviceConfigPath: /etc/metricbeat/metricbeat.yml
+          affectedNodes: ${settings.affectedNodes}
         addToExtendPerm:
           agentName: metricbeat
+          affectedNodes: ${settings.affectedNodes}
         addServiceToSudoers:
           agentName: metricbeat
+          affectedNodes: ${settings.affectedNodes}
     - if ('${settings.heartbeat}' == 'true'):
         installPackage:
           packageName: heartbeat-elastic
+          affectedNodes: ${settings.affectedNodes}
         configureService:
           serviceConfigPath: /etc/heartbeat/heartbeat.yml
+          affectedNodes: ${settings.affectedNodes}
         fixBeatsPermissions:
           serviceConfigPath: /etc/heartbeat/heartbeat.yml
+          affectedNodes: ${settings.affectedNodes}
         addToExtendPerm:
           agentName: heartbeat
+          affectedNodes: ${settings.affectedNodes}
         addServiceToSudoers:
           agentName: heartbeat
-  
-  installFilebeat:
-    - addSigninKey
-    - createYumRepo
-    - installAgents
+          affectedNodes: ${settings.affectedNodes}
 
   addSigninKey:
     cmd [${targetNodes.nodeType}]: rpm --import https://packages.elastic.co/GPG-KEY-elasticsearch
     user: root
   
   addToExtendPerm:
-    cmd [${targetNodes.nodeType}]: |- 
+    cmd [${settings.affectedNodes}]: |- 
       sed -ci -e 's|common |common /etc/${this.agentName};|g' /etc/jelastic/extendperm.conf;
       jem filemanager extendperm;
     user: root
@@ -216,36 +253,36 @@ actions:
         body: |
           Cmnd_Alias ${this.agentName}_SERVICE = /sbin/service ${this.agentName} *, /usr/bin/systemctl * ${this.agentName}, /usr/bin/systemctl * ${this.agentName}.service, /etc/init.d/${this.agentName} *, ${this.agentName} *
           %ssh-access ALL = NOPASSWD: ${this.agentName}_SERVICE
-    - cmd [${targetNodes.nodeType}]: |-
+    - cmd [${settings.affectedNodes}]: |-
         echo '${this.body}' > /etc/sudoers.d/${this.agentName}
       user: root
       
   installPackage:
     - if ('${settings.beatsossversion}' == 'latest'):
-        - cmd [${targetNodes.nodeGroup}]: |-
+        - cmd [${settings.affectedNodes}]: |-
             yum install -y ${this.packageName}
           user: root
     - else:
-        - cmd [${targetNodes.nodeGroup}]: |-
+        - cmd [${settings.affectedNodes}]: |-
             yum install -y ${this.packageName}-${settings.beatsossversion}
           user: root
-    - cmd [${targetNodes.nodeGroup}]: |-
+    - cmd [${settings.affectedNodes}]: |-
         systemctl enable ${this.packageName}
       user: root     
   
   fixBeatsPermissions:
-    - cmd[${targetNodes.nodeType}]: |-
+    - cmd[${settings.affectedNodes}]: |-
         chmod go-w ${this.serviceConfigPath};
       user: root
       
   configureService:
     - if ('${settings.elasticsearchHost:}'):
-        - cmd [${targetNodes.nodeGroup}]: |-
+        - cmd [${settings.affectedNodes}]: |-
             sed -ci -e 's/hosts:[[:space:]]*\["localhost:9200"\]/hosts: ["${settings.elasticsearchHost}"]/g' ${this.serviceConfigPath};
             sed -ci -e 's/#protocol: "https"/protocol: "http[s]*"/g' ${this.serviceConfigPath};
           user: root
     - else:
-        - cmd [${targetNodes.nodeGroup}]: |-
+        - cmd [${settings.affectedNodes}]: |-
             sed -ci -e 's/^[[:space:]]*output.elasticsearch:/#output.elasticsearch:/g' ${this.serviceConfigPath};
             sed -ci -e 's/^[[:space:]]*hosts:[[:space:]]*\["localhost:9200"\]/#hosts: ["localhost:9200"]/g' ${this.serviceConfigPath};
           user: root
@@ -255,11 +292,11 @@ actions:
                 sed -ci -e 's/#hosts:[[:space:]]*\["localhost:5044"\]/hosts: \["${settings.logstashHost}"\]/g' ${this.serviceConfigPath};
               user: root
     - if ('${settings.kibanaHost:}'):
-        - cmd [${targetNodes.nodeGroup}]: |-
+        - cmd [${settings.affectedNodes}]: |-
             sed -ci -e 's/#host:[[:space:]]*"localhost:5601"/host: "${settings.kibanaHost}"/g' ${this.serviceConfigPath};
           user: root
     - if ('${settings.elasticsearchUser:}'):
-        - cmd [${targetNodes.nodeGroup}]: |-
+        - cmd [${settings.affectedNodes}]: |-
             sed -ci -e 's/#username:[[:space:]]*"elastic"/username: "${settings.elasticsearchUser}"/g' ${this.serviceConfigPath};
             sed -ci -e 's/#password:[[:space:]]*"changeme"/password: "${settings.elasticsearchPassword:}"/g' ${this.serviceConfigPath};
           user: root     
@@ -287,7 +324,7 @@ actions:
 
         return { result: 0, modules: fbModules.join(" ")};
 
-    - cmd [${targetNodes.nodeGroup}]: |-
+    - cmd [${settings.affectedNodes}]: |-
         ${this.agentName} modules enable ${response.modules}
         ${this.agentName} setup
         service ${this.agentName} start
