@@ -93,6 +93,11 @@ settings:
 nodeGroupAlias:
   ${targetNodes.nodeGroup}: target
 
+buttons:
+  - caption: Configure
+    settings: main
+    action: configure
+
 onInstall:
   installBeats: 
     affectedNodes: ${targetNodes.nodeGroup}
