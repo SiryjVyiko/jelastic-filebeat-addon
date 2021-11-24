@@ -105,7 +105,7 @@ onAfterScaleOut [target]:
 onUninstall:
   cmd [target]: |- 
     yum -y remove filebeat journalbeat auditbeat packetbeat metricbeat heartbeat
-    rm -f /etc/yum.repos.d/elastic.repo /etc/sudoers.d/*.beat&
+    rm -f /etc/yum.repos.d/elastic.repo /etc/sudoers.d/*.beat$
   user: root
   
 actions:
