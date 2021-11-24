@@ -143,7 +143,7 @@ actions:
         addServiceToSudoers:
           agentName: filebeat
           affectedNodes: ${this.affectedNodes}
-    - else:
+    - if ('${settings.filebeat}' == 'false'):
         removePackage:
           packageName: filebeat
           affectedNodes: ${this.affectedNodes}
@@ -163,7 +163,7 @@ actions:
         addServiceToSudoers:
           agentName: journalbeat
           affectedNodes: ${this.affectedNodes}
-    - else:
+    - if ('${settings.journalbeat}' == 'false'):
         removePackage:
           packageName: journalbeat
           affectedNodes: ${this.affectedNodes}
@@ -183,7 +183,7 @@ actions:
         addServiceToSudoers:
           agentName: auditbeat
           affectedNodes: ${this.affectedNodes}
-    - else:
+    - if ('${settings.auditbeat}' == 'false'):
         removePackage:
           packageName: auditbeat
           affectedNodes: ${this.affectedNodes}
@@ -203,7 +203,7 @@ actions:
         addServiceToSudoers:
           agentName: packetbeat
           affectedNodes: ${this.affectedNodes}
-    - else:
+    - if ('${settings.packetbeat}' == 'false'):
         removePackage:
           packageName: packetbeat
           affectedNodes: ${this.affectedNodes}
@@ -226,7 +226,7 @@ actions:
         addServiceToSudoers:
           agentName: metricbeat
           affectedNodes: ${this.affectedNodes}
-    - else:
+    - if ('${settings.metricbeat}' == 'false'):
         removePackage:
           packageName: metricbeat
           affectedNodes: ${this.affectedNodes}
@@ -246,7 +246,7 @@ actions:
         addServiceToSudoers:
           agentName: heartbeat
           affectedNodes: ${this.affectedNodes}
-    - else:
+    - if ('${settings.heartbeat}' == 'false'):
         removePackage:
           packageName: heartbeat-elastic
           affectedNodes: ${this.affectedNodes}
