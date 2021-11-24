@@ -90,10 +90,6 @@ settings:
       hideLabel: false
       hidden: false
 
-globals:
-  configPath: /etc/filebeat/filebeat.yml
-  defaultModules: system
-
 nodeGroupAlias:
   ${targetNodes.nodeGroup}: target
 
@@ -269,7 +265,7 @@ actions:
   
   installModules:        
     - script: |
-        var fbModules = ['${globals.defaultModules}'];
+        var fbModules = ['system'];
 
         var nodeTypeModules = {
           'nginx.*': [ 'nginx' ],
