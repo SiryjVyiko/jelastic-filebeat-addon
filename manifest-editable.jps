@@ -6,8 +6,8 @@ logo: https://iconape.com/wp-content/png_logo_vector/elastic-beats.png
 description:
   short: 'Elastic Beats: Lightweight data shippers'
   text: |
-    Beats is a free and open platform for single-purpose data shippers. They send data from nodes of your environments to Logstash or OpneSearch (Elasticsearch).
-homepage: https://www.elastic.co/beats/filebeat
+    Beats is a free and open platform for single-purpose data shippers. They send data from nodes of your environments to Logstash or OpenSearch (Elasticsearch).
+homepage: https://www.elastic.co/beats/
 
 targetNodes: any
 
@@ -132,34 +132,34 @@ actions:
         removeAgent:
           agentName: filebeat
           affectedNodes: ${this.affectedNodes}
-    - if ('${settings.journalbeat}' == 'true'):
+    - if (${settings.journalbeat:true}):
         installAgent:
           agentName: journalbeat
           affectedNodes: ${this.affectedNodes}
           serviceConfigPath: /etc/journalbeat/journalbeat.yml
-    - if ('${settings.journalbeat}' == 'false'):
+    - else:
         removeAgent:
           agentName: journalbeat
           affectedNodes: ${this.affectedNodes}
-    - if ('${settings.auditbeat}' == 'true'):
+    - if (${settings.auditbeat:true}):
         installAgent:
           agentName: auditbeat
           affectedNodes: ${this.affectedNodes}
           serviceConfigPath: /etc/auditbeat/auditbeat.yml
-    - if ('${settings.auditbeat}' == 'false'):
+    - else:
         removeAgent:
           agentName: auditbeat
           affectedNodes: ${this.affectedNodes}
-    - if ('${settings.packetbeat}' == 'true'):
+    - if (${settings.packetbeat:true}):
         installAgent:
           agentName: packetbeat
           affectedNodes: ${this.affectedNodes}
           serviceConfigPath: /etc/packetbeat/packetbeat.yml
-    - if ('${settings.packetbeat}' == 'false'):
+    - else:
         removeAgent:
           agentName: packetbeat
           affectedNodes: ${this.affectedNodes}
-    - if ('${settings.metricbeat}' == 'true'):
+    - if (${settings.metricbeat:true}):
         installAgent:
           agentName: metricbeat
           affectedNodes: ${this.affectedNodes}
@@ -167,16 +167,16 @@ actions:
         installModules:
           agentName: metricbeat
           affectedNodes: ${this.affectedNodes}
-    - if ('${settings.metricbeat}' == 'false'):
+    - else:
         removeAgent:
           agentName: metricbeat
           affectedNodes: ${this.affectedNodes}
-    - if ('${settings.heartbeat}' == 'true'):
+    - if (${settings.heartbeat:true}):
         installAgent:
           agentName: heartbeat-elastic
           affectedNodes: ${this.affectedNodes}
           serviceConfigPath: /etc/heartbeat/heartbeat.yml
-    - if ('${settings.heartbeat}' == 'false'):
+    - else:
         removeAgent:
           agentName: heartbeat-elastic
           affectedNodes: ${this.affectedNodes}
