@@ -121,47 +121,25 @@ actions:
     - addSigninKey
     - createYumRepo
     - if ('${settings.filebeat}' == 'true'):
-        installPackage:
-          packageName: filebeat
+        installAgent:
+          agentName: filebeat
           affectedNodes: ${this.affectedNodes}
-        configureService:
           serviceConfigPath: /etc/filebeat/filebeat.yml
-          affectedNodes: ${this.affectedNodes}
         installModules:
           agentName: filebeat
           affectedNodes: ${this.affectedNodes}
-        fixBeatsPermissions:
-          serviceConfigPath: /etc/filebeat/filebeat.yml
-          affectedNodes: ${this.affectedNodes}
-        addToExtendPerm:
-          agentName: filebeat
-          affectedNodes: ${this.affectedNodes}
-        addServiceToSudoers:
-          agentName: filebeat
-          affectedNodes: ${this.affectedNodes}
     - if ('${settings.filebeat}' == 'false'):
-        removePackage:
-          packageName: filebeat
+        removeAgent:
+          agentName: filebeat
           affectedNodes: ${this.affectedNodes}
     - if ('${settings.journalbeat}' == 'true'):
-        installPackage:
-          packageName: journalbeat
-          affectedNodes: ${this.affectedNodes}
-        configureService:
-          serviceConfigPath: /etc/journalbeat/journalbeat.yml
-          affectedNodes: ${this.affectedNodes}
-        fixBeatsPermissions:
-          serviceConfigPath: /etc/journalbeat/journalbeat.yml
-          affectedNodes: ${this.affectedNodes}
-        addToExtendPerm:
+        installAgent:
           agentName: journalbeat
           affectedNodes: ${this.affectedNodes}
-        addServiceToSudoers:
-          agentName: journalbeat
-          affectedNodes: ${this.affectedNodes}
+          serviceConfigPath: /etc/journalbeat/journalbeat.yml
     - if ('${settings.journalbeat}' == 'false'):
-        removePackage:
-          packageName: journalbeat
+        removeAgent:
+          agentName: journalbeat
           affectedNodes: ${this.affectedNodes}
     - if ('${settings.auditbeat}' == 'true'):
         installPackage:
@@ -216,21 +194,10 @@ actions:
           packageName: metricbeat
           affectedNodes: ${this.affectedNodes}
     - if ('${settings.heartbeat}' == 'true'):
-        installPackage:
+        installAgent:
           packageName: heartbeat-elastic
           affectedNodes: ${this.affectedNodes}
-        configureService:
           serviceConfigPath: /etc/heartbeat/heartbeat.yml
-          affectedNodes: ${this.affectedNodes}
-        fixBeatsPermissions:
-          serviceConfigPath: /etc/heartbeat/heartbeat.yml
-          affectedNodes: ${this.affectedNodes}
-        addToExtendPerm:
-          agentName: heartbeat
-          affectedNodes: ${this.affectedNodes}
-        addServiceToSudoers:
-          agentName: heartbeat
-          affectedNodes: ${this.affectedNodes}
     - if ('${settings.heartbeat}' == 'false'):
         removePackage:
           packageName: heartbeat-elastic
@@ -360,10 +327,10 @@ actions:
         service ${this.agentName} start
       user: root
       
-  removePackage:
+  removeAgent:
     - cmd [${this.affectedNodes}]: |-
-        rm -f /etc/yum.repos.d/${this.packageName};
-        yum -y remove ${this.packageName};
+        rm -f /etc/yum.repos.d/${this.agentName};
+        yum -y remove ${this.agentName};
       user: root
   
   configure:
