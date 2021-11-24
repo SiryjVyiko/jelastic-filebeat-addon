@@ -12,82 +12,83 @@ homepage: https://www.elastic.co/beats/filebeat
 targetNodes: any
 
 settings:
-  fields:
-    - type: checkboxlist
-      caption: Installed agents
-      name: options
-      columns: 2
-      values:
-        - name: filebeat
-          caption: Filebeat
-          value: true
+  main:
+    fields:
+      - type: checkboxlist
+        caption: Installed agents
+        name: options
+        columns: 2
+        values:
+          - name: filebeat
+            caption: Filebeat
+            value: true
 
-        - name: journalbeat
-          caption: Journalbeat
-          value: false
+          - name: journalbeat
+            caption: Journalbeat
+            value: false
 
-        - name: auditbeat
-          caption: Auditbeat
-          value: false
+          - name: auditbeat
+            caption: Auditbeat
+            value: false
           
-        - name: packetbeat
-          caption: Packetbeat
-          value: false
+          - name: packetbeat
+            caption: Packetbeat
+            value: false
 
-        - name: metricbeat
-          caption: Metribeat
-          value: false
+          - name: metricbeat
+            caption: Metribeat
+            value: false
 
-        - name: heartbeat
-          caption: Heartbeat
-          value: false
+          - name: heartbeat
+            caption: Heartbeat
+            value: false
   
-    - type: string
-      name: elasticsearchHost
-      caption: OpenSearch (Elasticsearch) Host (optional)
-      placeholder: 0.0.0.0:9200
-      required: false
+      - type: string
+        name: elasticsearchHost
+        caption: OpenSearch (Elasticsearch) Host (optional)
+        placeholder: 0.0.0.0:9200
+        required: false
       
-    - type: compositefield
-      caption: Credentials (optional)
-      defaultMargins: 0 10 0 0
-      items:
-        - type: string
-          name: elasticsearchUser
-          placeholder: User
-          width: 200
+      - type: compositefield
+        caption: Credentials (optional)
+        defaultMargins: 0 10 0 0
+        items:
+          - type: string
+            name: elasticsearchUser
+            placeholder: User
+            width: 200
 
-        - type: displayfield
-          cls: x-form-item-label
-          value: Password
-          width: 60
+          - type: displayfield
+            cls: x-form-item-label
+            value: Password
+            width: 60
 
-        - type: string
-          name: elasticsearchPassword
-          inputType: password
-          width: 163
+          - type: string
+            name: elasticsearchPassword
+            inputType: password
+            width: 163
           
-    - type: string
-      name: kibanaHost
-      caption: OpenSearch Dashboards (Kibana) Host (optional)
-      placeholder: 0.0.0.0:5601
-      required: false
+      - type: string
+        name: kibanaHost
+        caption: OpenSearch Dashboards (Kibana) Host (optional)
+        placeholder: 0.0.0.0:5601
+        required: false
       
-    - type: string
-      name: logstashHost
-      caption: Logstash Host (optional)
-      placeholder: 0.0.0.0:5044
-      required: false
+      - type: string
+        name: logstashHost
+        caption: Logstash Host (optional)
+        placeholder: 0.0.0.0:5044
+        required: false
       
-    - type: list
-      name: beatsossversion
-      caption: Beats OSS version
-      values:
-        7.12.1: 7.12.1
-        latest: latest
-      default: 7.12.1
-      hideLabel: false
-      hidden: false
+      - type: list
+        name: beatsossversion
+        caption: Beats OSS version
+        values:
+          7.12.1: 7.12.1
+          latest: latest
+        default: 7.12.1
+        hideLabel: false
+        hidden: false
 
 nodeGroupAlias:
   ${targetNodes.nodeGroup}: target
