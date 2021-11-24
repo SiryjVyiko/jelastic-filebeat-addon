@@ -143,6 +143,10 @@ actions:
         addServiceToSudoers:
           agentName: filebeat
           affectedNodes: ${this.affectedNodes}
+    - else:
+        removePackage:
+          packageName: filebeat
+          affectedNodes: ${this.affectedNodes}
     - if ('${settings.journalbeat}' == 'true'):
         installPackage:
           packageName: journalbeat
@@ -158,6 +162,10 @@ actions:
           affectedNodes: ${this.affectedNodes}
         addServiceToSudoers:
           agentName: journalbeat
+          affectedNodes: ${this.affectedNodes}
+    - else:
+        removePackage:
+          packageName: journalbeat
           affectedNodes: ${this.affectedNodes}
     - if ('${settings.auditbeat}' == 'true'):
         installPackage:
@@ -175,6 +183,10 @@ actions:
         addServiceToSudoers:
           agentName: auditbeat
           affectedNodes: ${this.affectedNodes}
+    - else:
+        removePackage:
+          packageName: auditbeat
+          affectedNodes: ${this.affectedNodes}
     - if ('${settings.packetbeat}' == 'true'):
         installPackage:
           packageName: packetbeat
@@ -190,6 +202,10 @@ actions:
           affectedNodes: ${this.affectedNodes}
         addServiceToSudoers:
           agentName: packetbeat
+          affectedNodes: ${this.affectedNodes}
+    - else:
+        removePackage:
+          packageName: packetbeat
           affectedNodes: ${this.affectedNodes}
     - if ('${settings.metricbeat}' == 'true'):
         installPackage:
@@ -210,6 +226,10 @@ actions:
         addServiceToSudoers:
           agentName: metricbeat
           affectedNodes: ${this.affectedNodes}
+    - else:
+        removePackage:
+          packageName: metricbeat
+          affectedNodes: ${this.affectedNodes}
     - if ('${settings.heartbeat}' == 'true'):
         installPackage:
           packageName: heartbeat-elastic
@@ -225,6 +245,10 @@ actions:
           affectedNodes: ${this.affectedNodes}
         addServiceToSudoers:
           agentName: heartbeat
+          affectedNodes: ${this.affectedNodes}
+    - else:
+        removePackage:
+          packageName: heartbeat
           affectedNodes: ${this.affectedNodes}
 
   addSigninKey:
@@ -332,6 +356,12 @@ actions:
         ${this.agentName} modules enable ${response.modules}
         ${this.agentName} setup
         service ${this.agentName} start
+      user: root
+      
+  removePackage:
+    - cmd [${this.affectedNodes}]: |-
+        rm -f /etc/yum.repos.d/${this.packageName};
+        yum -y remove ${this.packageName};
       user: root
   
   configure:
