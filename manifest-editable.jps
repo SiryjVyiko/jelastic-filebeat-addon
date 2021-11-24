@@ -248,7 +248,7 @@ actions:
           affectedNodes: ${this.affectedNodes}
     - else:
         removePackage:
-          packageName: heartbeat
+          packageName: heartbeat-elastic
           affectedNodes: ${this.affectedNodes}
 
   addSigninKey:
