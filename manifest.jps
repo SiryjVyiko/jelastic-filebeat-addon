@@ -228,7 +228,7 @@ actions:
     user: root
   
   addToExtendPerm:
-    cmd [${settings.affectedNodes}]: |- 
+    cmd [${this.affectedNodes}]: |- 
       sed -ci -e 's|common |common /etc/${this.agentName};|g' /etc/jelastic/extendperm.conf;
       jem filemanager extendperm;
     user: root
@@ -253,50 +253,50 @@ actions:
         body: |
           Cmnd_Alias ${this.agentName}_SERVICE = /sbin/service ${this.agentName} *, /usr/bin/systemctl * ${this.agentName}, /usr/bin/systemctl * ${this.agentName}.service, /etc/init.d/${this.agentName} *, ${this.agentName} *
           %ssh-access ALL = NOPASSWD: ${this.agentName}_SERVICE
-    - cmd [${settings.affectedNodes}]: |-
+    - cmd [${this.affectedNodes}]: |-
         echo '${this.body}' > /etc/sudoers.d/${this.agentName}
       user: root
       
   installPackage:
     - if ('${settings.beatsossversion}' == 'latest'):
-        - cmd [${settings.affectedNodes}]: |-
+        - cmd [${this.affectedNodes}]: |-
             yum install -y ${this.packageName}
           user: root
     - else:
-        - cmd [${settings.affectedNodes}]: |-
+        - cmd [${this.affectedNodes}]: |-
             yum install -y ${this.packageName}-${settings.beatsossversion}
           user: root
-    - cmd [${settings.affectedNodes}]: |-
+    - cmd [${this.affectedNodes}]: |-
         systemctl enable ${this.packageName}
       user: root     
   
   fixBeatsPermissions:
-    - cmd[${settings.affectedNodes}]: |-
+    - cmd[${this.affectedNodes}]: |-
         chmod go-w ${this.serviceConfigPath};
       user: root
       
   configureService:
     - if ('${settings.elasticsearchHost:}'):
-        - cmd [${settings.affectedNodes}]: |-
+        - cmd [${this.affectedNodes}]: |-
             sed -ci -e 's/hosts:[[:space:]]*\["localhost:9200"\]/hosts: ["${settings.elasticsearchHost}"]/g' ${this.serviceConfigPath};
             sed -ci -e 's/#protocol: "https"/protocol: "http[s]*"/g' ${this.serviceConfigPath};
           user: root
     - else:
-        - cmd [${settings.affectedNodes}]: |-
+        - cmd [${this.affectedNodes}]: |-
             sed -ci -e 's/^[[:space:]]*output.elasticsearch:/#output.elasticsearch:/g' ${this.serviceConfigPath};
             sed -ci -e 's/^[[:space:]]*hosts:[[:space:]]*\["localhost:9200"\]/#hosts: ["localhost:9200"]/g' ${this.serviceConfigPath};
           user: root
         - if ('${settings.logstashHost:}'):
-            - cmd [${targetNodes.nodeGroup}]: |-
+            - cmd [${this.affectedNodes}]: |-
                 sed -ci -e 's/#output.logstash:/output.logstash:/g' ${this.serviceConfigPath};
                 sed -ci -e 's/#hosts:[[:space:]]*\["localhost:5044"\]/hosts: \["${settings.logstashHost}"\]/g' ${this.serviceConfigPath};
               user: root
     - if ('${settings.kibanaHost:}'):
-        - cmd [${settings.affectedNodes}]: |-
+        - cmd [${this.affectedNodes}]: |-
             sed -ci -e 's/#host:[[:space:]]*"localhost:5601"/host: "${settings.kibanaHost}"/g' ${this.serviceConfigPath};
           user: root
     - if ('${settings.elasticsearchUser:}'):
-        - cmd [${settings.affectedNodes}]: |-
+        - cmd [${this.affectedNodes}]: |-
             sed -ci -e 's/#username:[[:space:]]*"elastic"/username: "${settings.elasticsearchUser}"/g' ${this.serviceConfigPath};
             sed -ci -e 's/#password:[[:space:]]*"changeme"/password: "${settings.elasticsearchPassword:}"/g' ${this.serviceConfigPath};
           user: root     
@@ -324,7 +324,7 @@ actions:
 
         return { result: 0, modules: fbModules.join(" ")};
 
-    - cmd [${settings.affectedNodes}]: |-
+    - cmd [${this.affectedNodes}]: |-
         ${this.agentName} modules enable ${response.modules}
         ${this.agentName} setup
         service ${this.agentName} start
