@@ -99,6 +99,7 @@ onInstall:
     affectedNodes: ${targetNodes.nodeGroup}
 
 onAfterRedeployContainer [target]:
+  createYumRepo
   installAgents: 
     affectedNodes: ${event.params.nodeGroup:[event.params.nodeId]}
 
