@@ -92,7 +92,7 @@ settings:
 
 nodeGroupAlias:
   ${targetNodes.nodeGroup}: target
-
+  
 buttons:
   - caption: Configure
     settings: main
@@ -101,12 +101,9 @@ buttons:
 onInstall:
   installBeats: 
     affectedNodes: ${targetNodes.nodeGroup}
-  addToExtendPerm: 
-    affectedNodes: ${targetNodes.nodeGroup}
 
 onAfterRedeployContainer [target]:
-  - createYumRepo
-  - installAgents: 
+  - installBeats:
       affectedNodes: ${event.params.nodeGroup:[event.params.nodeId]}
 
 onAfterScaleOut [target]:
@@ -336,3 +333,7 @@ actions:
         ${this.agentName} setup
         service ${this.agentName} start
       user: root
+  
+  configure:
+    installBeats: 
+      affectedNodes: ${targetNodes.nodeGroup}
