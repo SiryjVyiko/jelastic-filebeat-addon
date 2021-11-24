@@ -120,7 +120,7 @@ actions:
   installBeats:
     - addSigninKey
     - createYumRepo
-    - if ('${settings.filebeat}' == 'true'):
+    - if (${settings.filebeat:true}):
         installAgent:
           agentName: filebeat
           affectedNodes: ${this.affectedNodes}
@@ -128,7 +128,7 @@ actions:
         installModules:
           agentName: filebeat
           affectedNodes: ${this.affectedNodes}
-    - if ('${settings.filebeat}' == 'false'):
+    - else:
         removeAgent:
           agentName: filebeat
           affectedNodes: ${this.affectedNodes}
