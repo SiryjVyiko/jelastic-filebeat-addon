@@ -97,13 +97,14 @@ onInstall:
   addToExtendPerm: ${targetNodes.nodeGroup}
 
 onAfterRedeployContainer [target]:
-  installFilebeat: ${event.params.nodeGroup:[event.params.nodeId]}
+  installAgents: ${event.params.nodeGroup:[event.params.nodeId]}
 
 onAfterScaleOut [target]:
   installAgents: ${event.response.nodes.join(id,)}
 
 onUninstall:
-  cmd [target]: yum -y remove filebeat journalbeat auditbeat packetbeat metricbeat heartbeat
+  cmd [target]: |- 
+    yum -y remove filebeat journalbeat auditbeat packetbeat metricbeat heartbeat
   user: root
   
 actions:
