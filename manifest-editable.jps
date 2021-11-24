@@ -103,11 +103,11 @@ onInstall:
     affectedNodes: ${targetNodes.nodeGroup}
 
 onAfterRedeployContainer [target]:
-  - installBeats:
-      affectedNodes: ${event.params.nodeGroup:[event.params.nodeId]}
+  installBeats:
+    affectedNodes: ${event.params.nodeGroup:[event.params.nodeId]}
 
 onAfterScaleOut [target]:
-  installAgents: 
+  installBeats: 
     affectedNodes: ${event.response.nodes.join(id,)}
 
 onUninstall:
@@ -120,10 +120,6 @@ actions:
   installBeats:
     - addSigninKey
     - createYumRepo
-    - installAgents:
-        affectedNodes: ${this.affectedNodes}
- 
-  installAgents:
     - if ('${settings.filebeat}' == 'true'):
         installPackage:
           packageName: filebeat
@@ -188,21 +184,10 @@ actions:
           packageName: auditbeat
           affectedNodes: ${this.affectedNodes}
     - if ('${settings.packetbeat}' == 'true'):
-        installPackage:
+        installAgent:
           packageName: packetbeat
           affectedNodes: ${this.affectedNodes}
-        configureService:
           serviceConfigPath: /etc/packetbeat/packetbeat.yml
-          affectedNodes: ${this.affectedNodes}
-        fixBeatsPermissions:
-          serviceConfigPath: /etc/packetbeat/packetbeat.yml
-          affectedNodes: ${this.affectedNodes}
-        addToExtendPerm:
-          agentName: packetbeat
-          affectedNodes: ${this.affectedNodes}
-        addServiceToSudoers:
-          agentName: packetbeat
-          affectedNodes: ${this.affectedNodes}
     - if ('${settings.packetbeat}' == 'false'):
         removePackage:
           packageName: packetbeat
@@ -250,6 +235,23 @@ actions:
         removePackage:
           packageName: heartbeat-elastic
           affectedNodes: ${this.affectedNodes}
+          
+  installAgent:
+    - installPackage:
+        packageName: ${this.packageName}
+        affectedNodes: ${this.affectedNodes}
+    - configureService:
+        serviceConfigPath: ${this.serviceConfigPath}
+        affectedNodes: ${this.affectedNodes}
+    - fixBeatsPermissions:
+        serviceConfigPath: ${this.serviceConfigPath}
+        affectedNodes: ${this.affectedNodes}
+    - addToExtendPerm:
+        agentName: ${this.packageName}
+        affectedNodes: ${this.affectedNodes}
+    - addServiceToSudoers:
+        agentName: ${this.packageName}
+        affectedNodes: ${this.affectedNodes}
 
   addSigninKey:
     cmd [${targetNodes.nodeType}]: rpm --import https://packages.elastic.co/GPG-KEY-elasticsearch
@@ -260,7 +262,7 @@ actions:
       sed -ci -e 's|common |common /etc/${this.agentName};|g' /etc/jelastic/extendperm.conf;
       jem filemanager extendperm;
     user: root
-
+    
   createYumRepo:
     - set:
         body: |
