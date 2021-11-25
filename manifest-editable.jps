@@ -202,10 +202,16 @@ actions:
         affectedNodes: ${this.affectedNodes}
        
   removeStrictPerms:
-    cmd [${targetNodes.nodeType}]: |-
-      sed -ci -e 's|--path.logs /var/log/${this.agentName}.*|--path.logs /var/log/${this.agentName} --strict.perms=false|' /etc/init.d/${this.agentName}
-      sed -ci -e 's|--path.logs /var/log/${this.agentName}.*|--path.logs /var/log/${this.agentName} --strict.perms=false|' /usr/lib/systemd/system/${this.agentName}.service
-    user: root    
+    - if ('${this.agentName}' != 'heartbeat-elastic'):
+        cmd [${targetNodes.nodeType}]: |-
+          sed -ci -e 's|--path.logs /var/log/${this.agentName}|--path.logs /var/log/${this.agentName} --strict.perms=false|' /etc/init.d/${this.agentName}
+          sed -ci -e 's|--path.logs /var/log/${this.agentName}|--path.logs /var/log/${this.agentName} --strict.perms=false|' /usr/lib/systemd/system/${this.agentName}.service
+        user: root
+    - if ('${this.agentName}' == 'heartbeat-elastic'):
+        cmd [${targetNodes.nodeType}]: |-
+          sed -ci -e 's|--path.logs /var/log/heartbeat|--path.logs /var/log/heartbeat --strict.perms=false|' /etc/init.d/${this.agentName}
+          sed -ci -e 's|--path.logs /var/log/heartbeat|--path.logs /var/log/heartbeat --strict.perms=false|' /usr/lib/systemd/system/${this.agentName}.service
+        user: root
 
   addSigninKey:
     cmd [${targetNodes.nodeType}]: rpm --import https://packages.elastic.co/GPG-KEY-elasticsearch
