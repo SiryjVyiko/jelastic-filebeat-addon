@@ -212,6 +212,8 @@ actions:
           sed -ci -e 's|--path.logs /var/log/heartbeat|--path.logs /var/log/heartbeat --strict.perms=false|' /etc/init.d/${this.agentName}
           sed -ci -e 's|--path.logs /var/log/heartbeat|--path.logs /var/log/heartbeat --strict.perms=false|' /usr/lib/systemd/system/${this.agentName}.service
         user: root
+    - cmd [${targetNodes.nodeType}]: |-
+        sudo service ${this.agentName} start
 
   addSigninKey:
     cmd [${targetNodes.nodeType}]: rpm --import https://packages.elastic.co/GPG-KEY-elasticsearch
@@ -318,7 +320,7 @@ actions:
     - cmd [${this.affectedNodes}]: |-
         ${this.agentName} modules enable ${response.modules}
         ${this.agentName} setup
-        service ${this.agentName} start
+        service ${this.agentName} restart
       user: root
       
   removeAgent:
