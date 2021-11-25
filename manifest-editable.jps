@@ -230,7 +230,7 @@ actions:
           %ssh-access ALL = NOPASSWD: agent_name_SERVICE
     - cmd [${this.affectedNodes}]: |-
         echo '${this.body}' > /etc/sudoers.d/${this.agentName}
-        sed -i "s/agent_name/$(echo ${this.agentName}|tr a-z A-Z)/" /etc/sudoers.d/${this.agentName}
+        sed -ci -e "s/agent_name/$(echo ${this.agentName}|tr a-z A-Z)/" /etc/sudoers.d/${this.agentName}
       user: root
       
   installPackage:
