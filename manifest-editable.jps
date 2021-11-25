@@ -226,7 +226,7 @@ actions:
   addServiceToSudoers:
     - set:
         body: |
-          Cmnd_Alias ${this.agentName}_SERVICE = /sbin/service ${this.agentName} *, /usr/bin/systemctl * ${this.agentName}.service, /etc/init.d/${this.agentName} *, ${this.agentName} *, /usr/bin/systemctl * ${this.agentName}
+          Cmnd_Alias ${this.agentName}_SERVICE = /sbin/service ${this.agentName} *, /usr/bin/systemctl * ${this.agentName}.service, /etc/init.d/${this.agentName} *, /urs/bin/${this.agentName} *, /usr/bin/systemctl * ${this.agentName}
           %ssh-access ALL = NOPASSWD: ${this.agentName}_SERVICE
     - cmd [${this.affectedNodes}]: |-
         echo '${this.body}' > /etc/sudoers.d/${this.agentName}
