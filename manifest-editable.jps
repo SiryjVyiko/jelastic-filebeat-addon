@@ -203,8 +203,8 @@ actions:
        
   removeStrictPerms:
     cmd [${targetNodes.nodeType}]: |-
-      sed -ci -e 's|--path.logs /var/log/${this.agentName}|--path.logs /var/log/${this.agentName} --strict.perms=false|' /etc/init.d/${this.agentName}
-      sed -ci -e 's|--path.logs /var/log/${this.agentName}|--path.logs /var/log/${this.agentName} --strict.perms=false|' /usr/lib/systemd/system/${this.agentName}.service
+      sed -ci -e 's|--path.logs /var/log/${this.agentName}|--path.logs /var/log/.* --strict.perms=false|' /etc/init.d/${this.agentName}
+      sed -ci -e 's|--path.logs /var/log/${this.agentName}|--path.logs /var/log/.* --strict.perms=false|' /usr/lib/systemd/system/${this.agentName}.service
     user: root    
 
   addSigninKey:
